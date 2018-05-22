@@ -1,61 +1,11 @@
 <?php
-
-declare(strict_types=1);
-
 namespace GoetasWebservices\XML\XSDReader\Tests;
 
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef;
 use GoetasWebservices\XML\XSDReader\Schema\Type\ComplexType;
-use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 
 class SchemaTest extends BaseTest
 {
-    public function testWithXSDAsDefaultNamespace()
-    {
-        $xml = '
-        <schema xmlns="http://www.w3.org/2001/XMLSchema"
-            xmlns:ds="http://www.example.com"
-            targetNamespace="http://www.example.com"
-            elementFormDefault="qualified"> 
-
-            <simpleType name="CryptoBinary">
-              <restriction base="base64Binary"/>
-            </simpleType>
-            <simpleType name="LocalCryptoBinary">
-              <restriction base="ds:CryptoBinary"/>
-            </simpleType>
-        </schema>';
-        $schema = $this->reader->readString($xml);
-
-        $crypto = $schema->findType('CryptoBinary', 'http://www.example.com');
-        $this->assertInstanceOf(SimpleType::class, $crypto);
-
-        $localCrypto = $schema->findType('LocalCryptoBinary', 'http://www.example.com');
-        $this->assertInstanceOf(SimpleType::class, $localCrypto);
-    }
-
-    /**
-     * @expectedException \GoetasWebservices\XML\XSDReader\Exception\IOException
-     * @expectedExceptionMessage Can't load the schema
-     *
-     * @throws \GoetasWebservices\XML\XSDReader\Exception\IOException
-     */
-    public function testErrorString()
-    {
-        $this->reader->readString('abcd');
-    }
-
-    /**
-     * @expectedException \GoetasWebservices\XML\XSDReader\Exception\IOException
-     * @expectedExceptionMessage Can't load the file 'abcd'
-     *
-     * @throws \GoetasWebservices\XML\XSDReader\Exception\IOException
-     */
-    public function testErrorFile()
-    {
-        $this->reader->readFile('abcd');
-    }
-
     public function testBaseEmpty()
     {
         $schema = $this->reader->readString('<xs:schema targetNamespace="http://www.example.com" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>');
@@ -86,7 +36,7 @@ class SchemaTest extends BaseTest
     {
         $schema = $this->reader->readString('<xs:schema targetNamespace="http://www.example.com" xmlns:xs="http://www.w3.org/2001/XMLSchema"/>');
 
-        $this->expectException('GoetasWebservices\XML\XSDReader\Schema\Exception\TypeNotFoundException');
+        $this->setExpectedException('GoetasWebservices\XML\XSDReader\Schema\Exception\TypeNotFoundException');
         $schema->$find('foo');
     }
 
@@ -108,6 +58,7 @@ class SchemaTest extends BaseTest
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Type\ComplexType', $schema->findType('myType', 'http://www.example.com'));
         //$this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Type\ComplexType', $schema->findType('myType'));
 
+
         $this->assertCount(1, $schema->getElements());
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef', $schema->findElement('myElement', 'http://www.example.com'));
 
@@ -119,6 +70,7 @@ class SchemaTest extends BaseTest
 
         $this->assertCount(1, $schema->getAttributes());
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Attribute\AttributeDef', $schema->findAttribute('myAttribute', 'http://www.example.com'));
+
     }
 
     public function testMultipleSchemasInSameFile()
@@ -157,6 +109,7 @@ class SchemaTest extends BaseTest
 
         $this->assertCount(1, $schema2->getElements());
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef', $schema2->findElement('myElement2', 'http://www.example2.com'));
+
     }
 
     public function testGroupRefInType()
@@ -167,7 +120,7 @@ class SchemaTest extends BaseTest
                 <xs:complexType>
                     <xs:group ref="myGroup"/>
                 </xs:complexType>
-            </xs:element>
+            </xs:element>            
             <xs:group name="myGroup">
                 <xs:choice>
                     <xs:element name="groupElement" type="xs:string"/>
@@ -182,8 +135,8 @@ class SchemaTest extends BaseTest
         $this->assertCount(1, $schema1->getElements());
 
         /**
-         * @var ElementDef
-         * @var $type      ComplexType
+         * @var $element ElementDef
+         * @var $type ComplexType
          */
         $element = $schema1->findElement('myElement', 'http://www.example.com');
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Element\ElementDef', $element);

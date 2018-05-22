@@ -3,12 +3,8 @@ namespace GoetasWebservices\XML\XSDReader\Schema\Attribute;
 
 use GoetasWebservices\XML\XSDReader\Schema\Item;
 
-class Attribute extends Item implements AttributeSingle
+class AttributeRef extends Item implements AttributeSingle
 {
-
-    protected $fixed;
-
-    protected $default;
 
     protected $qualified = true;
 
@@ -16,26 +12,29 @@ class Attribute extends Item implements AttributeSingle
 
     protected $use = self::USE_OPTIONAL;
 
-    public function getFixed()
+    /**
+     *
+     * @var Attribute
+     */
+    protected $wrapped;
+
+    public function __construct(AttributeDef $att)
     {
-        return $this->fixed;
+        parent::__construct($att->getSchema(), $att->getName());
+        $this->wrapped = $att;
+    }
+    /**
+     *
+     * @return AttributeDef
+     */
+    public function getReferencedAttribute()
+    {
+        return $this->wrapped;
     }
 
-    public function setFixed($fixed)
+    public function getType()
     {
-        $this->fixed = $fixed;
-        return $this;
-    }
-
-    public function getDefault()
-    {
-        return $this->default;
-    }
-
-    public function setDefault($default)
-    {
-        $this->default = $default;
-        return $this;
+        return $this->wrapped->getType();
     }
 
     public function isQualified()

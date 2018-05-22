@@ -1,7 +1,4 @@
 <?php
-
-declare(strict_types=1);
-
 namespace GoetasWebservices\XML\XSDReader\Tests;
 
 class TypesTest extends BaseTest
@@ -21,16 +18,17 @@ class TypesTest extends BaseTest
             <xs:schema targetNamespace="http://www.example.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType name="complexType">
                     <xs:sequence>
-                        <xs:element name="el1" type="'.$type.'"></xs:element>
+                        <xs:element name="el1" type="' . $type . '"></xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:schema>');
+
 
         $complex = $schema->findType('complexType', 'http://www.example.com');
 
         $elements = $complex->getElements();
         $this->assertNotNull($elements[0]->getType()->getName());
-        $this->assertEquals($type, 'xs:'.$elements[0]->getType()->getName());
+        $this->assertEquals($type, "xs:" . $elements[0]->getType()->getName());
     }
 
     public function testAnonymousTypes()
@@ -46,12 +44,14 @@ class TypesTest extends BaseTest
                 </xs:complexType>
             </xs:schema>');
 
+
         $complex = $schema->findType('complexType', 'http://www.example.com');
         $attrs = $complex->getAttributes();
         $elements = $complex->getElements();
 
-        $this->assertEquals('anyType', $attrs[0]->getType()->getName());
-        $this->assertEquals('anyType', $elements[0]->getType()->getName());
+        $this->assertEquals("anyType", $attrs[0]->getType()->getName());
+        $this->assertEquals("anyType", $elements[0]->getType()->getName());
+
     }
 
     public function testAttrAttr()
@@ -130,7 +130,7 @@ class TypesTest extends BaseTest
             <xs:schema targetNamespace="http://www.example.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType name="complexType">
                     <xs:sequence>
-                        <xs:element name="el1" maxOccurs="'.$xml.'" type="xs:string"></xs:element>
+                        <xs:element name="el1" maxOccurs="' . $xml . '" type="xs:string"></xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:schema>');
@@ -158,7 +158,7 @@ class TypesTest extends BaseTest
             <xs:schema targetNamespace="http://www.example.com" xmlns:xs="http://www.w3.org/2001/XMLSchema">
                 <xs:complexType name="complexType">
                     <xs:sequence>
-                        <xs:element name="el1" minOccurs="'.$xml.'" type="xs:string"></xs:element>
+                        <xs:element name="el1" minOccurs="' . $xml . '" type="xs:string"></xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:schema>');
@@ -219,7 +219,7 @@ class TypesTest extends BaseTest
         $this->assertEquals('el3', $elements[2]->getName());
         $this->assertEquals('g1', $elements[3]->getName());
 
-        $this->assertEquals('anyType', $elements[1]->getType()->getName());
+        $this->assertEquals("anyType", $elements[1]->getType()->getName());
 
         $attributes = $complex->getAttributes();
         $this->assertCount(4, $attributes);
@@ -234,7 +234,8 @@ class TypesTest extends BaseTest
         $this->assertEquals('att', $attributes[2]->getName());
         $this->assertEquals('attGroup', $attributes[3]->getName());
 
-        $this->assertEquals('anyType', $attributes[1]->getType()->getName());
+        $this->assertEquals("anyType", $attributes[1]->getType()->getName());
+
     }
 
     public function testSimple()
@@ -251,6 +252,7 @@ class TypesTest extends BaseTest
         $this->assertInstanceOf('GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType', $simple);
         $this->assertEquals('http://www.example.com', $simple->getSchema()->getTargetNamespace());
         $this->assertEquals('simpleType', $simple->getName());
+
     }
 
     public function testComplexSimpleContent()
@@ -286,6 +288,7 @@ class TypesTest extends BaseTest
         $this->assertEquals('http://www.w3.org/2001/XMLSchema', $base1->getSchema()->getTargetNamespace());
         $this->assertEquals('string', $base1->getName());
 
+
         $attributes = $complex->getAttributes();
         $this->assertCount(4, $attributes);
 
@@ -299,6 +302,7 @@ class TypesTest extends BaseTest
         $this->assertEquals('att', $attributes[2]->getName());
         $this->assertEquals('attGroup', $attributes[3]->getName());
 
-        $this->assertEquals('anyType', $attributes[1]->getType()->getName());
+        $this->assertEquals("anyType", $attributes[1]->getType()->getName());
+
     }
 }

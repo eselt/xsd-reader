@@ -12,12 +12,23 @@ Read any [XML Schema](http://www.w3.org/XML/Schema) (XSD) programmatically with 
 Installation
 ------------
 
-The recommended way to install the `xsd-reader` via [Composer](https://getcomposer.org/):
+There are two recommended ways to install the `xsd-reader` via [Composer](https://getcomposer.org/):
+
+* using the ``composer require`` command:
 
 ```bash
 composer require 'goetas-webservices/xsd-reader'
 ```
 
+* adding the dependency to your ``composer.json`` file:
+
+```js
+"require": {
+    ..
+    "goetas-webservices/xsd-reader" : "0.*",
+    ..
+}
+```
 Getting started
 ---------------
 

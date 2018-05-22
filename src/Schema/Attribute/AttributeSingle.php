@@ -1,30 +1,54 @@
 <?php
-
-declare(strict_types=1);
-
 namespace GoetasWebservices\XML\XSDReader\Schema\Attribute;
-
-use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 
 interface AttributeSingle extends AttributeItem
 {
-    public const USE_OPTIONAL = 'optional';
 
-    public const USE_PROHIBITED = 'prohibited';
+    const USE_OPTIONAL = 'optional';
 
-    public const USE_REQUIRED = 'required';
+    const USE_PROHIBITED = 'prohibited';
 
-    public function getType(): ?Type;
+    const USE_REQUIRED = 'required';
 
-    public function isQualified(): bool;
+    /**
+     *
+     * @return \GoetasWebservices\XML\XSDReader\Schema\Type\Type
+     */
+    public function getType();
 
-    public function setQualified(bool $qualified): void;
+    /**
+     *
+     * @return bool
+     */
+    public function isQualified();
 
-    public function isNil(): bool;
+    /**
+     *
+     * @param boolean $qualified
+     */
+    public function setQualified($qualified);
 
-    public function setNil(bool $nil): void;
+    /**
+     *
+     * @return bool
+     */
+    public function isNil();
 
-    public function getUse(): ?string;
+    /**
+     *
+     * @param boolean $qualified
+     */
+    public function setNil($nil);
 
-    public function setUse(string $use): void;
+    /**
+     *
+     * @return string
+     */
+    public function getUse();
+
+    /**
+     *
+     * @param string $use
+     */
+    public function setUse($use);
 }

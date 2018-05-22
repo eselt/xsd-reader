@@ -1,40 +1,23 @@
 <?php
-
-declare(strict_types=1);
-
 namespace GoetasWebservices\XML\XSDReader\Schema\Inheritance;
 
 class Restriction extends Base
 {
-    /**
-     * @var mixed[][]
-     */
+
     protected $checks = array();
 
-    /**
-     * @param string  $type
-     * @param mixed[] $value
-     */
-    public function addCheck(string $type, array $value): void
+    public function addCheck($type, $value)
     {
         $this->checks[$type][] = $value;
+        return $this;
     }
 
-    /**
-     * @return mixed[][]
-     */
-    public function getChecks(): array
+    public function getChecks()
     {
         return $this->checks;
     }
-
-    /**
-     * @param string $type
-     *
-     * @return mixed[]
-     */
-    public function getChecksByType(string $type): array
+    public function getChecksByType($type)
     {
-        return isset($this->checks[$type]) ? $this->checks[$type] : array();
+        return isset($this->checks[$type])?$this->checks[$type]:array();
     }
 }

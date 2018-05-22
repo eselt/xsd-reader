@@ -1,26 +1,13 @@
 <?php
-
-declare(strict_types=1);
-
 namespace GoetasWebservices\XML\XSDReader\Schema\Element;
 
-use BadMethodCallException;
-
-class GroupRef extends Group implements InterfaceSetMinMax
+class GroupRef extends Group
 {
-    /**
-     * @var Group
-     */
+
     protected $wrapped;
 
-    /**
-     * @var int
-     */
     protected $min = 1;
 
-    /**
-     * @var int
-     */
     protected $max = 1;
 
     public function __construct(Group $group)
@@ -29,62 +16,53 @@ class GroupRef extends Group implements InterfaceSetMinMax
         $this->wrapped = $group;
     }
 
-    public function getMin(): int
+    public function getMin()
     {
         return $this->min;
     }
 
-    public function setMin(int $min): void
+    public function setMin($min)
     {
         $this->min = $min;
+        return $this;
     }
 
-    public function getMax(): int
+    public function getMax()
     {
         return $this->max;
     }
 
-    public function setMax(int $max): void
+    public function setMax($max)
     {
         $this->max = $max;
+        return $this;
     }
 
-    public function getName(): string
+    public function getName()
     {
         return $this->wrapped->getName();
     }
 
-    /**
-     * @return ElementItem[]
-     */
-    public function getElements(): array
+    public function setName($name)
+    {
+        throw new \Exception("Can't set the name for a ref group");
+    }
+
+    public function getElements()
     {
         $elements = $this->wrapped->getElements();
-
-        /**
-         * @var int $k
-         */
-        foreach ($elements as $k => $element) {
-            /**
-             * @var Element|ElementRef|ElementSingle|GroupRef $e
-             */
-            $e = clone $element;
-            if ($this->getMax() > 0 || $this->getMax() === -1) {
+        if($this->getMax()>0 || $this->getMax()===-1){
+            foreach ($elements as $k => $element) {
+                $e = clone $element;
                 $e->setMax($this->getMax());
+                $elements[$k] = $e;
             }
-
-            if ($this->getMin() > 1 && $e->getMin() === 1) {
-                $e->setMin($this->getMin());
-            }
-
-            $elements[$k] = $e;
         }
-
         return $elements;
     }
 
-    public function addElement(ElementItem $element): void
+    public function addElement(ElementItem $element)
     {
-        throw new BadMethodCallException("Can't add an element for a ref group");
+        throw new \Exception("Can't set the name for a ref group");
     }
 }
